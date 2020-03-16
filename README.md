@@ -1,6 +1,8 @@
 # COVID 19 in Wisconsin
 I've got nothing else to do for the next 2 weeks......
 
+DATA SOURCE: https://www.dhs.wisconsin.gov/outbreaks/index.htm
+
 not sure what i will do with this data yet but i plan on
 keeping it updated for at least the 'Case' counts.
 luckily, no deaths to report yet in sconee
