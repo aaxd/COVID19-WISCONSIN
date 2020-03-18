@@ -19,30 +19,30 @@ var svg = d3.select("svg"),
 
 // Map and projection
 var projection = d3.geoMercator()
-    .center([-87.41, 44.54])                // GPS of location to zoom on
+    .center([2, 47])                // GPS of location to zoom on
     .scale(1020)                       // This is like the zoom
     .translate([ width/2, height/2 ])
 
 
 // Create data for circles:
 var markers = [
-  {long: -89.12, lat: 44.149, group: "A", size: 34}, // corsica
-  {long: -90.16, lat: 43.71, group: "A", size: 14}, // nice
-  {long: -88.32, lat: 44.64, group: "B", size: 87}, // Paris
-  {long: -89.397, lat: 43.664, group: "B", size: 41}, // Hossegor
-//   {long: 3.075, lat: 50.640, group: "C", size: 78}, // Lille
-//   {long: -3.83, lat: 58, group: "C", size: 12} // Morlaix
+  {long: 9.083, lat: 42.149, group: "A", size: 34}, // corsica
+  {long: 7.26, lat: 43.71, group: "A", size: 14}, // nice
+  {long: 2.349, lat: 48.864, group: "B", size: 87}, // Paris
+  {long: -1.397, lat: 43.664, group: "B", size: 41}, // Hossegor
+  {long: 3.075, lat: 50.640, group: "C", size: 78}, // Lille
+  {long: -3.83, lat: 58, group: "C", size: 12} // Morlaix
 ];
 
 // Load external data and boot
-d3.json("https://raw.githubusercontent.com/jasparkatt/COVID19-WISCONSIN/master/data/Covid_Cases.geojson", function(data){
+d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson", function(data){
 
     // Filter data
-    data.features = data.features.filter( function(d){return d.properties.COUNTY_NAM=="Portage"} )
+    data.features = data.features.filter( function(d){return d.properties.name=="France"} )
 
     // Create a color scale
     var color = d3.scaleOrdinal()
-      .domain(["A", "B", "C"])
+      .domain(["A", "B", "C" ])
       .range([ "#402D54", "#D18975", "#8FD175"])
 
     // Add a scale for bubble size
