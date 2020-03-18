@@ -1,0 +1,88 @@
+<!-- Code from d3-graph-gallery.com -->
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<!-- Load d3.js and the geo projection plugin -->
+<script src="https://d3js.org/d3.v4.js"></script>
+<script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+
+<!-- Create an element where the map will take place -->
+<svg id="my_dataviz" width="960" height="640"></svg>
+
+
+<script>
+
+// The svg
+var svg = d3.select("svg"),
+    width = +svg.attr("width"),
+    height = +svg.attr("height");
+
+// Map and projection
+var projection = d3.geoMercator()
+    .center([-90.1, 44.54])                // GPS of location to zoom on
+    .scale(204 * 23)                       // This is like the zoom
+    .translate([ width/2, height/2 ])
+
+
+// Create data for circles:
+ var markers = [
+    { long: -89.418332, lat: 43.0673, name: "Dane", size: 19 },
+    { long: -88.488292, lat: 43.7535, name: "Fond du Lac", size: 11 },
+    { long: -88.0427, lat: 42.5768, name: "Kenosha", size: 4 },
+    { long: -87.9668, lat: 43.0071, name: "Milwaukee", size: 24 },
+    { long: -88.4649, lat: 44.4161, name: "Outagamie", size: 1 },
+    { long: -92.4225, lat: 44.7194, name: "Pierce", size: 1 },
+    { long: -88.0611, lat: 42.7475, name: "Racine", size: 1 },
+    { long: -87.9454, lat: 43.7212, name: "Sheboygan", size: 3 },
+    { long: -88.3045, lat: 43.0182, name: "Waukesha", size: 4 },
+    { long: -88.6445, lat: 44.0689, name: "Winnebago", size: 3 },
+    { long: -90.0416, lat: 44.4553, name: "Wood", size: 1 }
+  ];
+  
+
+// Load external data and boot
+
+d3.json("https://raw.githubusercontent.com/jasparkatt/COVID19-WISCONSIN/master/data/Cnty_geo.json", function(data){
+
+    // Filter data--mess around with filtering on cases,deaths,recovered
+    //data.features = data.features.filter( function(d){return d.properties.COUNTY_NAM=="Portage"} )
+
+    // Create a color scale
+    var color = d3.scaleOrdinal()
+      // .domain(["Cases", "Deaths", "Recovered"])
+      .range([ "#402D54", "#D18975", "#8FD175"])
+
+    // Add a scale for bubble size
+    var size = d3.scaleLinear()
+     // .domain([0,100])  // What's in the data
+      .range([ 4, 5])  // Size in pixel
+
+    // Draw the map
+    svg.append("g")
+        .selectAll("path")
+        .data(data.features)
+        .enter()
+        .append("path")
+          .attr("fill", "#b8b8b8")
+          .attr("d", d3.geoPath()
+              .projection(projection)
+          )
+        .style("stroke", "black")
+        .style("opacity", .3)
+
+    // Add circles:
+    svg
+      .selectAll("myCircles")
+      .data(markers)
+      .enter()
+      .append("circle")
+        .attr("cx", function(d){ return projection([d.lon, d.lat])[0] })
+        .attr("cy", function(d){ return projection([d.lon, d.lat])[1] })
+        .attr("r", function(d){ return size(d.size) })
+         .style("fill", function(d){ return color(d.name) })
+         .attr("stroke", function(d){ return color(d.name) })
+        .attr("stroke-width", 3)
+        .attr("fill-opacity", .4)
+})
+
+</script>
